@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # 複製依賴檔案並安裝
 COPY requirements.txt .
-RUN pip install --no-cache-dir --user -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # 最終階段
 FROM python:3.11-slim
@@ -18,10 +18,8 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # 從 builder 階段複製已安裝的套件
-COPY --from=builder /root/.local /root/.local
-
-# 確保腳本在 PATH 中
-ENV PATH=/root/.local/bin:$PATH
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 
 # 複製應用程式代碼
 COPY --chown=appuser:appuser . .
