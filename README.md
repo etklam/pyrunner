@@ -20,3 +20,4 @@ The API will be available at http://localhost:5000
 - `GET /items` - Get all items
 - `GET /items/<id>` - Get a specific item
 - `POST /items` - Create a new item (JSON body with `name`)
+- `GET /public-house` - Get Hong Kong public house allocation status data

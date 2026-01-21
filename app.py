@@ -1,4 +1,6 @@
 from flask import Flask, jsonify, request
+from datetime import datetime
+from public_house.scraper import HousingAllocationScraper
 
 app = Flask(__name__)
 
@@ -25,6 +27,16 @@ def create_item():
     data = request.get_json()
     item = {"id": len(data) + 1, "name": data.get("name")}
     return jsonify(item), 201
+
+
+@app.route("/public-house", methods=["GET"])
+def get_public_house():
+    scraper = HousingAllocationScraper()
+    result = scraper.crawl()
+    if result:
+        result["fetch_date"] = result["fetch_date"].isoformat()
+        return jsonify(result)
+    return jsonify({"error": "Failed to fetch data"}), 500
 
 
 if __name__ == "__main__":
